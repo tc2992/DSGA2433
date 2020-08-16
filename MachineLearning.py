@@ -68,4 +68,3 @@ class ml_model(object):
         diabetes_prob=self.model.predict_proba(data)[0][1]
         return predict_class, diabetes_prob
     
-    
