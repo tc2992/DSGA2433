@@ -11,13 +11,13 @@ class Root(Tk):
         self.minsize(640,400)
         self.scrollbar = Scrollbar(self)
         self.scrollbar.pack( side = RIGHT,fill=Y)
-        self.mylist=Listbox(self, yscrollcommand = self.scrollbar.set )
+        self.mylist=Listbox(self, yscrollcommand = self.scrollbar.set,width=80 )
         #self.wm_iconbitmap('icon.ico')
         self.getanswers()
         #print (self.getanswers())
         self.getresult(retrain=re_train)
         self.mylist.pack()
-        self.scrollbar.config( command = self.mylist.yview )
+        self.scrollbar.config( command = self.mylist.yview)
 
     
     def getanswers(self):
@@ -69,18 +69,20 @@ class Root(Tk):
                 model=ml_model()
                 model.retrain(demo,diet,exam,labs,ques)
             pred_class,pred_proba=model.predict([self.data[1:]])
-            if pred_proba>0.6:
-                plan='Diabetes_Recommend_Product'
+            if pred_proba>0.85:
+                plan= 'None. We are sorry!'
+            elif pred_proba>0.6:
+                plan='Diabetes_Recommend_Product.'
             else:
-                plan='Regular_Product'
-            out='For Customer '+ self.data[0]+', the insurance plan is '+plan
+                plan='Diabetes_Recommend_Product or Regular_Product.'
+            out='For Customer '+ self.data[0]+','\
+                ' the insurance plan is '+plan
             self.mylist.insert(END,out)
             lb= Label(self,text=out)
             lb.pack()
         bt=Button(self,text='--START TO EVALUATE--',command=finalclick)
         bt.pack()
 
-    
 
 root = Root(re_train=False)
 root.mainloop()
